@@ -8,7 +8,7 @@ namespace factory_pattern {
      **************************/
     using namespace std;
 
-    //Object Library
+    //Object Library 
     enum e_object_type {
         e_object_type_a ,
         e_object_type_b ,
