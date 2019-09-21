@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <iostream>>
 
-namespace factory_patter {
+namespace factory_pattern {
     /**************************
      * FACTORY Design Pattern *
      **************************/
