@@ -4,7 +4,7 @@
 
 class foo {
     public: 
-    void bar() { assert(num != 0); }
+    void bar() { assert(num != 0); num++; std::cout << "num = " << num << std::endl;}
     private: 
     int num = 0;
     
@@ -18,12 +18,30 @@ using foo_w = std::weak_ptr<foo>;
 
 int main () {
     
-    foo_t my_foo_t = std::make_shared<foo> (5);
-    foo_w my_foo_w = my_foo_t;
-    foo_w my_foo_w2 = my_foo_t;
-    foo_w my_foo_w3 = my_foo_w; 
-    
-    
-    
+    foo_w my_foo_w; 
+    {  
+        foo_t my_foo_t = std::make_shared<foo> (5);
+        my_foo_t->bar();
+        my_foo_w = my_foo_t;
+        std::cout << " count = " << my_foo_w.use_count() << std::endl;
+        auto p = my_foo_w.lock();
+        std::cout << " count = " << my_foo_w.use_count() << std::endl;
+        p->bar();
+    }
+    std::cout << " count = " << my_foo_w.use_count() << std::endl;
+    my_foo_w.lock();
+    std::cout << " count = " << my_foo_w.use_count() << std::endl;
+      
 }
-    
+
+/*
+
+    input
+
+num = 6                                                                                                                                                                      
+ count = 1                                                                                                                                                                   
+ count = 2                                                                                                                                                                   
+num = 7                                                                                                                                                                      
+ count = 0                                                                                                                                                                   
+ count = 0                                                                                                                                                                   
+            */                                                               
