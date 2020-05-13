@@ -16,6 +16,10 @@ class foo {
 using foo_t = std::shared_ptr<foo>;
 using foo_w = std::weak_ptr<foo>;
 
+void copy_shared_ptr( foo_t temp) {
+    temp->bar();
+}
+
 int main () {
     
     foo_w my_foo_w; 
@@ -27,21 +31,26 @@ int main () {
         auto p = my_foo_w.lock();
         std::cout << " count = " << my_foo_w.use_count() << std::endl;
         p->bar();
+        
+        copy_shared_ptr(my_foo_t);
     }
+    
     std::cout << " count = " << my_foo_w.use_count() << std::endl;
     my_foo_w.lock();
     std::cout << " count = " << my_foo_w.use_count() << std::endl;
-      
+     
+    
+    
 }
+    
+/* OUTPUT
+num = 6
+ count = 1
+ count = 2
+num = 7
+num = 8
+ count = 0
+ count = 0
 
-/*
 
-    input
-
-num = 6                                                                                                                                                                      
- count = 1                                                                                                                                                                   
- count = 2                                                                                                                                                                   
-num = 7                                                                                                                                                                      
- count = 0                                                                                                                                                                   
- count = 0                                                                                                                                                                   
-            */                                                               
+*/
