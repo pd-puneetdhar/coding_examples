@@ -4,7 +4,8 @@
 
 class foo {
     public: 
-    void bar() { assert(num != 0); num++; std::cout << "num = " << num << std::endl;}
+    int get_num() { return num; }
+    void bar() { assert(num != 0); num++; std::cout << "foo_bar:: num = " << num << std::endl;}
     private: 
     int num = 0;
     
@@ -15,6 +16,18 @@ class foo {
 
 using foo_t = std::shared_ptr<foo>;
 using foo_w = std::weak_ptr<foo>;
+
+
+class foo_dash {
+    public: 
+    void foo_dash_bar() { assert(num != 0); num++; std::cout << "foo_dash_bar:: num = " << num << std::endl;}
+    private: 
+    int num = 0;
+    
+    public: 
+    foo_dash() = delete;
+    foo_dash(foo_t temp): num(temp->get_num()) {} //constructor with shared pointer argument 
+};
 
 void copy_shared_ptr( foo_t temp) {
     temp->bar();
@@ -33,6 +46,10 @@ int main () {
         p->bar();
         
         copy_shared_ptr(my_foo_t);
+        
+        //test foo_dash constructor
+        std::shared_ptr<foo_dash> temp_foo_dash = std::make_shared<foo_dash>(my_foo_t);
+        temp_foo_dash->foo_dash_bar();
     }
     
     std::cout << " count = " << my_foo_w.use_count() << std::endl;
@@ -42,15 +59,17 @@ int main () {
     
     
 }
-    
-/* OUTPUT
-num = 6
+
+/*OUTPUT
+foo_bar:: num = 6
  count = 1
  count = 2
-num = 7
-num = 8
+foo_bar:: num = 7
+foo_bar:: num = 8
+foo_dash_bar:: num = 9
  count = 0
  count = 0
-
-
 */
+
+
+    
