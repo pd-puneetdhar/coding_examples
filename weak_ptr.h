@@ -38,6 +38,9 @@ int main () {
     foo_w my_foo_w; 
     {  
         foo_t my_foo_t = std::make_shared<foo> (5);
+        //test foo_dash constructor
+        std::shared_ptr<foo_dash> temp_foo_dash = std::make_shared<foo_dash>(my_foo_t);
+        temp_foo_dash->foo_dash_bar();
         my_foo_t->bar();
         my_foo_w = my_foo_t;
         std::cout << " count = " << my_foo_w.use_count() << std::endl;
@@ -47,9 +50,7 @@ int main () {
         
         copy_shared_ptr(my_foo_t);
         
-        //test foo_dash constructor
-        std::shared_ptr<foo_dash> temp_foo_dash = std::make_shared<foo_dash>(my_foo_t);
-        temp_foo_dash->foo_dash_bar();
+
     }
     
     std::cout << " count = " << my_foo_w.use_count() << std::endl;
@@ -60,16 +61,14 @@ int main () {
     
 }
 
-/*OUTPUT
+/*foo_dash_bar:: num = 6
 foo_bar:: num = 6
  count = 1
  count = 2
 foo_bar:: num = 7
 foo_bar:: num = 8
-foo_dash_bar:: num = 9
  count = 0
  count = 0
+
+
 */
-
-
-    
