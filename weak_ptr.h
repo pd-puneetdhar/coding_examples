@@ -2,6 +2,7 @@
 #include <memory>
 #include "assert.h"
 
+
 class foo {
     public: 
     int get_num() { return num; }
@@ -12,6 +13,7 @@ class foo {
     public: 
     foo() = delete;
     foo(int n): num(n) {}
+    ~foo() { std::cout << __FUNCTION__ << std::endl; }
 };
 
 using foo_t = std::shared_ptr<foo>;
@@ -33,7 +35,20 @@ void copy_shared_ptr( foo_t temp) {
     temp->bar();
 }
 
+class foo_container {
+    public: 
+    foo_t temp = std::make_shared<foo>(5);
+    
+    foo_container() {
+        std::cout << "temp use count = " << temp.use_count() << std::endl;
+    }
+};
+    
+
 int main () {
+    
+    foo_container* temp_fc = new foo_container();
+    delete temp_fc;
     
     foo_w my_foo_w; 
     {  
@@ -60,15 +75,4 @@ int main () {
     
     
 }
-
-/*foo_dash_bar:: num = 6
-foo_bar:: num = 6
- count = 1
- count = 2
-foo_bar:: num = 7
-foo_bar:: num = 8
- count = 0
- count = 0
-
-
-*/
+    
